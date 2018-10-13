@@ -1,0 +1,43 @@
+#%RAML 1.0
+title: Complaints platform services orchestrator
+version: 1.0.0
+
+documentation:
+ - title: API Description
+   content: |
+     This RAML describes all functionalities that this service expose.
+ - title: Version
+   content: |
+     1.0.0
+uses: 
+  common: libraries/Library-Common.raml
+  test:   libraries/Library-Test.raml
+
+traits:
+  pageable: !include traits/Trait-Pageable.raml
+      
+resourceTypes: 
+  collection-test: !include resource-types/ResourceType-CollectionTest.raml
+  collection-html: !include resource-types/ResourceType-CollectionHtml.raml
+  collection-item: !include resource-types/ResourceType-CollectionItem.raml
+  
+###########################################################################################        
+# endpoints        
+###########################################################################################
+/v1:
+  /console:
+    description: Retrieve the RAML API endpoints definition
+    type: {
+      collection-html: {
+        errorObject: common.error
+      }
+    }
+  /hello:
+    description: Retrieve a basic test message from backend
+    type: { 
+      collection-test: {  
+        response: test.helloResponse,
+        responseExample: "Hello John doe! I am the search api...",
+        errorObject: common.error
+      }
+    }

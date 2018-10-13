@@ -147,7 +147,7 @@
                     <outputRelativePath>/src/main/java</outputRelativePath>
                     <addTimestampFolder>false</addTimestampFolder>
                     <basePackage>co.cpl.api.generated</basePackage>
-                    <baseUri>/api</baseUri>
+                    <baseUri>/</baseUri>
                     <generateUnreferencedObjects>true</generateUnreferencedObjects>
                     <generationConfig>
                         <useBigDecimals>true</useBigDecimals>

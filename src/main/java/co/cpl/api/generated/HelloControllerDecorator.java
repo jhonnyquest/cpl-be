@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 
  */
 @RestController
-@RequestMapping("/api/v1/hello")
+@RequestMapping("/v1/hello")
 @Validated
 public class HelloControllerDecorator
     implements HelloController

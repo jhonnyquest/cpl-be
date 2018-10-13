@@ -10,7 +10,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class SimpleResponse implements Serializable
 {
 
-    final static long serialVersionUID = 7754856819352332540L;
+    final static long serialVersionUID = -7524341369735163600L;
     /**
      * Operation status
      * 

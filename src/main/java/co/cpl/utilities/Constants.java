@@ -14,7 +14,7 @@ public class Constants {
 
     // This is an example of how to declare constants
     // please build your own constants based on this
-	public static final String RAML_URL = "src/main/resources/raml/api.html";
+	public static final String RAML_URL = "raml/api.html";
 
 	private Constants() {
 	}

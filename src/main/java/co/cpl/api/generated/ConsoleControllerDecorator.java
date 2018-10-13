@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 
  */
 @RestController
-@RequestMapping("/api/v1/console")
+@RequestMapping("/v1/console")
 @Validated
 public class ConsoleControllerDecorator
     implements ConsoleController

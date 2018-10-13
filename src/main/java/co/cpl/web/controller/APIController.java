@@ -19,7 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 
+import javax.annotation.Resources;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -105,7 +108,8 @@ public class APIController extends BaseRestController implements HelloController
     @Override
     public ResponseEntity<?> getObject() {
         try {
-            return new ResponseEntity<>(Files.readAllBytes(Paths.get(RAML_URL)), HttpStatus.OK);
+            String path = this.getClass().getClassLoader().getResource(RAML_URL).getPath();
+            return new ResponseEntity<>(Files.readAllBytes(Paths.get(path)), HttpStatus.OK);
         } catch (IOException e) {
             return errorResponse(new HttpClientErrorException(HttpStatus.SERVICE_UNAVAILABLE));
         }

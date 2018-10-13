@@ -2,7 +2,7 @@
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
-### Payment microservice for Complaints project ###
+### Orchestrator backend service for Complaints project ###
 
 * Quick summary
 * Version
@@ -10,7 +10,6 @@ This README would normally document whatever steps are necessary to get your app
 ### How do I get set up? ###
 
 ## Setup environment variables ##
-
 
 ### Contribution guidelines ###
 

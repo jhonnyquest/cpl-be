@@ -10,7 +10,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class Error implements Serializable
 {
 
-    final static long serialVersionUID = -7499554108599999792L;
+    final static long serialVersionUID = -6003350691605141492L;
     /**
      * error code assigned
      * 

@@ -1,12 +1,8 @@
 #%RAML 1.0 ResourceType
 get:
-  queryParameters:
-    name:
-      type: string
-      example: "Jhonny"
-  responses: 
+  responses:
     200:
-      body: 
+      body:
         application/json:
           type: <<response>>
           example: <<responseExample>>
@@ -25,3 +21,8 @@ get:
         application/json:
           type: <<errorObject>>
           example: !include ../examples/Example-Error401.json
+    404:
+      body:
+        application/json:
+          type: <<errorObject>>
+          example: !include ../examples/Example-Error404.json

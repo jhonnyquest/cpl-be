@@ -22,7 +22,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import co.cpl.utilities.PropertyManagerApacheImpl;
 
 /***
  * Configuration class for Spring IOC
@@ -61,18 +60,4 @@ public class ApplicationConfig {
 		}
 		return properties;
 	}
-	
-	/***
-	 * Inclusion of the Property management class in spring IOC
-	 * 
-	 * 
-	 * @return The property management component implemented using as base
-	 *         apache commons configuration
-	 * 
-	 */
-	@Bean("pm")
-	public PropertyManagerApacheImpl getPM() {
-		return new PropertyManagerApacheImpl(CPL_ENV_VAR, CPL_MSTR_CONFG);
-	}
-	
 }

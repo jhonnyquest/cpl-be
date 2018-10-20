@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -30,10 +29,8 @@ public class HelloControllerDecorator
      * 
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<String> getStringByName(
-        @RequestParam
-        java.lang.String name) {
-        return this.helloControllerDelegate.getStringByName(name);
+    public ResponseEntity<String> getString() {
+        return this.helloControllerDelegate.getString();
     }
 
 }

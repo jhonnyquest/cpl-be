@@ -12,20 +12,28 @@ package co.cpl.web.controller;
 
 import co.cpl.api.generated.ConsoleController;
 import co.cpl.api.generated.HelloController;
+import co.cpl.api.generated.UserController;
+import co.cpl.api.generated.model.SimpleResponse;
+import co.cpl.api.generated.model.User;
 import co.cpl.enums.ResponseKeyName;
+import co.cpl.enums.Status;
 import co.cpl.service.HelloService;
+import co.cpl.service.UserService;
+import co.cpl.utilities.CheckCatalogs;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 
-import javax.annotation.Resources;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 import static co.cpl.utilities.Constants.RAML_URL;
 
@@ -37,81 +45,57 @@ import static co.cpl.utilities.Constants.RAML_URL;
  * @version 1.0
  */
 @Component
-public class APIController extends BaseRestController implements HelloController, ConsoleController {
+public class APIController extends BaseRestController implements HelloController, ConsoleController, UserController {
 
     private HelloService helloService;
+    private UserService userService;
 
-    public APIController(HelloService helloService) {
+
+    public APIController(HelloService helloService, UserService userService) {
         this.helloService = helloService;
-    }
-
-    @Override
-    public ResponseEntity<String> getStringByName(String name) {
-        String hello = helloService.sayHello(name);
-        return new ResponseEntity<>(hello, HttpStatus.OK);
-//        return successResponse(hello, HttpStatus.OK);
-    }
-
-    private ResponseEntity<Object> successResponse(Object body, HttpStatus status) {
-        ResponseEntity<Object> responseEntity;
-        if(status.value() == 201) {
-            responseEntity = ResponseEntity.created(null)
-                    .body(createSuccessResponse(ResponseKeyName.CREATED_RESPONSE, body));
-        } else {
-            responseEntity = ResponseEntity.ok(createSuccessResponse(ResponseKeyName.OK_RESPONSE, body));
-        }
-        return responseEntity;
-    }
-
-    private ResponseEntity<Object> errorResponse(HttpClientErrorException ex) {
-        HashMap<String, Object> map = new HashMap<>();
-        HttpStatus status;
-        switch (ex.getStatusCode().value()) {
-            case 404:
-                map.put("message", "Not Found");
-                status = HttpStatus.NOT_FOUND;
-                break;
-            case 401:
-                map.put("message", "Access denied");
-                status = HttpStatus.UNAUTHORIZED;
-                break;
-            case 400:
-                map.put("message", "bad request");
-                status = HttpStatus.BAD_REQUEST;
-                break;
-            case 406:
-                map.put("message", "invalid parameter");
-                map.put("detail", ex.getMessage());
-                status = HttpStatus.NOT_ACCEPTABLE;
-                break;
-            case 412:
-                map.put("message", "invalid parameter");
-                map.put("detail", ex.getMessage());
-                status = HttpStatus.PRECONDITION_FAILED;
-                break;
-            case 500:
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
-                break;
-            case 503:
-                map.put("message", "Service unavailable");
-                status = HttpStatus.SERVICE_UNAVAILABLE;
-                break;
-            default:
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
-                map.put("message", "There was a problem trying to resolve the request");
-        }
-        return  ResponseEntity.status(status)
-                .body(createExeptionResponse(ResponseKeyName.EXCEPTION_RESPONSE, map, ex));
-
+        this.userService = userService;
     }
 
     @Override
     public ResponseEntity<?> getObject() {
+        String path = this.getClass().getClassLoader().getResource(RAML_URL).getPath();
         try {
-            String path = this.getClass().getClassLoader().getResource(RAML_URL).getPath();
             return new ResponseEntity<>(Files.readAllBytes(Paths.get(path)), HttpStatus.OK);
         } catch (IOException e) {
-            return errorResponse(new HttpClientErrorException(HttpStatus.SERVICE_UNAVAILABLE));
+            throw new HttpClientErrorException(HttpStatus.SERVICE_UNAVAILABLE);
         }
+    }
+
+    @Override
+    public ResponseEntity<List<User>> getUsers(Long offset, Long limit) {
+        return new ResponseEntity<>(userService.getUsers(offset, limit), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<SimpleResponse> createUser(@Valid User user) {
+        CheckCatalogs.checkStatus(user.getStatus());
+        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<SimpleResponse> updateUser(@Valid User user) {
+        if (!ArrayUtils.contains(Status.values(), user.getStatus()))
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<User> getUserByUserId(String userId) {
+        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<SimpleResponse> deleteUserByUserId(String userId) {
+        return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> getString() {
+        return null;
     }
 }

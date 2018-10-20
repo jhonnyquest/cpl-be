@@ -16,6 +16,6 @@ public interface HelloController {
      * No description
      * 
      */
-    public ResponseEntity<String> getStringByName(java.lang.String name);
+    public ResponseEntity<String> getString();
 
 }
